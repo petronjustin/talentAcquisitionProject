@@ -1,0 +1,5 @@
+package talent.acquisition.controller.model;
+
+public class RecruiterData {
+
+}

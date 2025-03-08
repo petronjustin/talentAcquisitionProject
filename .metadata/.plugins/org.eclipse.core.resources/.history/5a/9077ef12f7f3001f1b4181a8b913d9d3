@@ -1,0 +1,46 @@
+package talent.acquisition.service;
+
+import java.util.NoSuchElementException;
+import java.util.Objects;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import talent.acquisition.controller.model.RecruiterData;
+import talent.acquisition.dao.RecruiterDao;
+import talent.acquisition.entity.Recruiter;
+
+@Service
+public class JobPostingService {
+	@Autowired
+	private RecruiterDao recruiterDao;
+	
+	
+	@Transactional(readOnly = false)
+	public RecruiterData saveRecruiter(RecruiterData recruiterData) {
+		Long recruiterId = recruiterData.getRecruiterId();
+		Recruiter recruiter;
+		
+		findOrCreateRecruiter(recruiterId);
+	}
+
+	private Recruiter findOrCreateRecruiter(Long recruiterId) {
+		Recruiter recruiter;
+		if(Objects.isNull(recruiterId)) {
+			recruiter = new Recruiter();
+		}
+		else {
+			recruiter = findRecruiterById(recruiterId);
+		}
+		return recruiter;
+	}
+
+	private Recruiter findRecruiterById(Long recruiterId) {
+		
+		
+		return recruiterDao.findById(recruiterId).orElseThrow(() -> new NoSuchElementException
+				("Recruiter with ID=" + recruiterId + " was not found.") );
+	}
+
+}

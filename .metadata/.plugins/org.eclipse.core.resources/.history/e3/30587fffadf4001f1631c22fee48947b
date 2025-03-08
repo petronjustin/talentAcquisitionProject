@@ -1,0 +1,16 @@
+package talent.acquisition.dao;
+
+import java.util.Set;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import talent.acquisition.controller.model.JobPostingData.CandidateResponse;
+import talent.acquisition.entity.Candidate;
+
+public interface CandidateDao extends JpaRepository<Candidate, Long> {
+
+	Set<Candidate> findAllByCandidateIn(Set<CandidateResponse> candidates);
+
+
+
+}

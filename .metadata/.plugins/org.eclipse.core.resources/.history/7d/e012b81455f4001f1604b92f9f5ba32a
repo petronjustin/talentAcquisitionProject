@@ -1,0 +1,80 @@
+package talent.acquisition.controller.model;
+
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import talent.acquisition.entity.Candidate;
+import talent.acquisition.entity.JobPosting;
+import talent.acquisition.entity.Recruiter;
+
+
+@Data
+@NoArgsConstructor
+public class JobPostingData {
+
+	
+	private Long jobId;
+	private String jobTitle;
+	private String jobDepartment;
+	private String jobLocation;
+	private String jobDescription;
+
+	private Set<JobPostingCandidate> candidates = new HashSet<>();
+	
+	private RecruiterResponse recruiter;
+	
+	
+	public JobPostingData(JobPosting jobPosting) {
+		
+		jobId = jobPosting.getJobId();
+		jobTitle = jobPosting.getJobTitle();
+		jobDepartment = jobPosting.getJobDepartment();
+		jobLocation = jobPosting.getJobLocation();
+		jobDescription = jobPosting.getJobDescription();
+		
+		for(Candidate candidate : jobPosting.getCandidates()) {
+			candidates.add(new JobPostingCandidate(candidate));
+		}
+		recruiter = new RecruiterResponse(jobPosting.getRecruiter());
+	}
+	
+	@Data
+	@NoArgsConstructor
+	public static class JobPostingCandidate {
+		private Long candidateId;
+		private String candidateName;
+		private String candidateEmail;
+		private LocalDate applicationDate;
+		private String candidatePhone;
+		private String candidateStatus;
+		
+	public JobPostingCandidate(Candidate candidate) {
+		candidateId = candidate.getCandidateId();
+		candidateName = candidate.getCandidateName();
+		candidateEmail = candidate.getCandidateEmail();
+		applicationDate = candidate.getApplicationDate();
+		candidatePhone = candidate.getCandidatePhone();
+		candidateStatus = candidate.getCandidateStatus();
+	}
+	}
+	
+	@Data
+	@NoArgsConstructor
+	public static class RecruiterResponse {
+		private Long recruiterId;
+		
+		private String recruiterName;
+		private String recruiterEmail;
+		private String hiringRegion;
+		
+		public RecruiterResponse(Recruiter recruiter) {
+			recruiterId = recruiter.getRecruiterId();
+			recruiterName = recruiter.getRecruiterName();
+			recruiterEmail = recruiter.getRecruiterEmail();
+			hiringRegion = recruiter.getHiringRegion();
+		}
+	}
+}

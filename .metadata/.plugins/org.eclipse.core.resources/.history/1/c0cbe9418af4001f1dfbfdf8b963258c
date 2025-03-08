@@ -1,0 +1,107 @@
+package talent.acquisition.service;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import talent.acquisition.controller.model.JobPostingData;
+import talent.acquisition.controller.model.RecruiterData;
+import talent.acquisition.dao.CandidateDao;
+import talent.acquisition.dao.RecruiterDao;
+import talent.acquisition.entity.Candidate;
+import talent.acquisition.entity.Recruiter;
+
+@Service
+public class JobPostingService {
+	@Autowired
+	private RecruiterDao recruiterDao;
+	
+	@Autowired
+	private CandidateDao candidateDao;
+	
+	
+	
+	@Transactional(readOnly = false)
+	public RecruiterData saveRecruiter(RecruiterData recruiterData) {
+		Long recruiterId = recruiterData.getRecruiterId();
+		Recruiter recruiter = findOrCreateRecruiter(recruiterId, recruiterData.getRecruiterEmail());
+		
+		setFieldsInRecruiter(recruiter, recruiterData);
+		return new RecruiterData(recruiterDao.save(recruiter));
+	}
+
+	private void setFieldsInRecruiter(Recruiter recruiter, RecruiterData recruiterData) {
+		recruiter.setRecruiterEmail(recruiterData.getRecruiterEmail());
+		recruiter.setRecruiterName(recruiterData.getRecruiterName());
+		recruiter.setHiringRegion(recruiterData.getHiringRegion());
+		
+	}
+
+	private Recruiter findOrCreateRecruiter(Long recruiterId, String recruiterEmail) {
+		Recruiter recruiter;
+		if(Objects.isNull(recruiterId)) {
+			
+			Optional<Recruiter> opRecruiter = recruiterDao.findByRecruiterEmail(recruiterEmail); 
+			
+			if(opRecruiter.isPresent()) {
+				throw new DuplicateKeyException("Recruiter with email " + recruiterEmail + "already exists.");
+			}
+			
+			
+			recruiter = new Recruiter();
+		}
+		else {
+			recruiter = findRecruiterById(recruiterId);
+		}
+		return recruiter;
+	}
+
+
+
+	private Recruiter findRecruiterById(Long recruiterId) {
+		
+		
+		return recruiterDao.findById(recruiterId).orElseThrow(() -> new NoSuchElementException
+				("Recruiter with ID=" + recruiterId + " was not found.") );
+	}
+	
+	@Transactional(readOnly = true)
+	public List<RecruiterData> retrieveAllRecruiters() {
+		List<Recruiter> recruiters = recruiterDao.findAll();
+		List<RecruiterData> response = new LinkedList<>();
+		
+		for(Recruiter recruiter : recruiters) {
+			response.add(new RecruiterData(recruiter));
+		}
+		return response;
+	}
+
+	public RecruiterData retrieveRecruiterById(Long recruiterId) {
+		Recruiter recruiter = findRecruiterById(recruiterId);
+		return new RecruiterData(recruiter);
+	}
+
+	@Transactional(readOnly = false)
+	public void deleteRecruiterById(Long recruiterId) {
+		Recruiter recruiter = findRecruiterById(recruiterId);
+		recruiterDao.delete(recruiter);
+	}
+	
+	@Transactional(readOnly = false)
+	public JobPostingData saveJobPosting(Long recruiterId, JobPostingData jobPostingData) {
+		Recruiter recruiter = findRecruiterById(recruiterId);
+		
+		Set<Candidate> candidates = 
+				candidateDao.findAllByCandidateName(jobPostingData.getCandidates());
+	}
+}
+
+	

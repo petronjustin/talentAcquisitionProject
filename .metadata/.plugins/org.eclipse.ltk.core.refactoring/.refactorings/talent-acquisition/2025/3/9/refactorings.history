@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;talent-acquisition/src/main/resources/candidate.json&apos; to &apos;candidate-data.json&apos;" description="Rename resource &apos;candidate.json&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/resources/candidate.json" name="candidate-data.json" stamp="1740792604880" updateReferences="true"/>
+</session>

@@ -1,0 +1,26 @@
+package talent.acquisition.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.extern.slf4j.Slf4j;
+import talent.acquisition.controller.model.RecruiterData;
+import talent.acquisition.service.JobPostingService;
+
+@RestController
+@RequestMapping("/job_posting")
+@Slf4j
+public class JobPostingController {
+	
+	@Autowired
+	private JobPostingService jobPostingService;
+	
+	@PostMapping("/recruiter")
+	public RecruiterData insertRecruiter(@RequestBody RecruiterData recruiterData) {
+		log.info("Creating recruiter {}", recruiterData);
+		
+	}
+}

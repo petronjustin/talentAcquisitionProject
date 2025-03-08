@@ -1,0 +1,8 @@
+package talent.acquisition.service;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class JobPostingService {
+
+}

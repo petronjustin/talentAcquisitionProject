@@ -1,0 +1,17 @@
+package talent.acquisition.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import talent.acquisition.controller.model.RecruiterData;
+
+@Service
+public class JobPostingService {
+
+	
+	@Transactional(readOnly = false)
+	public RecruiterData saveRecruiter(RecruiterData recruiterData) {
+		Long recruiterId = recruiterData.getRecruiterId();
+	}
+
+}

@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    username: talent_acqui
+    password: talent_acqui
+    url: jdbc:mysql://localhost:3306/talent_acquisition
+    
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+   
+      
